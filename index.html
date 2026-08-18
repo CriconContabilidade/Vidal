@@ -831,8 +831,11 @@ function matchBaixaServicos(linhasExtrato, titulosAbertosIn){
   return {resultados, naoUsados: titulos.filter(t=>!t._used)};
 }
 
-/* ---- Resolução de CNPJ — código (empresa+cliente+código) primeiro, depois nome aproximado ---- */
+/* ---- Resolução de CNPJ — "Cliente Padrão" primeiro (sempre o CNPJ da própria Vidal Adv),
+   depois código (empresa+cliente+código), depois nome aproximado ---- */
+const CLIENTE_PADRAO_CNPJ = "25013621000130";
 function resolverCnpj(empresaCnpj, codigo, nomeRelatorio){
+  if(normalizeText(nomeRelatorio)==="CLIENTE PADRAO") return {documento: CLIENTE_PADRAO_CNPJ, nome: "VIDAL ADVOCACIA - SOCIEDADE INDIVIDUAL DE ADVOCACIA"};
   const chave = `${empresaCnpj}_cliente_${codigo}`;
   const doc = codigoIndex[chave];
   if(doc && clientesDB[doc]) return {documento: doc, nome: clientesDB[doc].razao_social};
