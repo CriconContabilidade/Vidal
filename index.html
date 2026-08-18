@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lançamentos Vidal Adv</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#1A1A1A;
+  --ink-soft:#65656B;
+  --paper:#E7E6E2;
+  --paper-raised:#FFFFFF;
+  --rule:#D6D5D1;
+  --rule-strong:#A9A7A2;
+  --red:#A6392C;
+  --red-bg:#F6E1DC;
+  --green-ink:#1F5E3C;
+  --green-bg:#DEEEE3;
+  --amber:#8A6400;
+  --amber-bg:#FCEEA9;
+  --accent:#2B4C7E;
+  --accent-bg:#DDE6F2;
+  --shadow: 0 1px 2px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.06);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:1280px;margin:0 auto;padding:28px 20px 80px;}
+
+.topbar{padding-bottom:18px;margin-bottom:22px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;}
+.brand h1{font-family:'Source Serif 4',serif;font-size:26px;font-weight:800;margin:0 0 4px;letter-spacing:-0.01em;}
+.brand .sub{font-size:13px;color:var(--ink-soft);max-width:680px;}
+.backlink{font-size:12.5px;color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted var(--ink-soft);}
+.backlink:hover{color:var(--ink);}
+.cricon-brand{display:flex;align-items:center;gap:8px;}
+.cricon-brand svg{width:28px;height:auto;flex-shrink:0;}
+.cricon-brand .cw{line-height:1.05;text-align:right;}
+.cricon-brand .cw .nm{font-family:'Source Serif 4',serif;font-style:italic;font-weight:700;font-size:14px;color:#5D4232;white-space:nowrap;}
+.cricon-brand .cw .tg{font-family:'IBM Plex Sans',sans-serif;font-size:9px;color:var(--ink-soft);letter-spacing:.02em;white-space:nowrap;}
+
+.card{background:var(--paper-raised);border:1.5px solid var(--ink);border-radius:6px;box-shadow:var(--shadow);padding:20px;margin-bottom:20px;}
+
+.dropzone{border:2px dashed var(--rule-strong);border-radius:6px;padding:22px 14px;text-align:center;cursor:pointer;transition:background .15s,border-color .15s;}
+.dropzone:hover,.dropzone.drag{background:rgba(0,0,0,0.03);border-color:var(--ink);}
+.dropzone .big{font-size:13.5px;font-weight:600;margin-bottom:4px;}
+.dropzone .small{font-size:11.5px;color:var(--ink-soft);}
+.dropzone.done{border-style:solid;border-color:var(--green-ink);background:var(--green-bg);}
+input[type=file]{display:none;}
+
+.field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px;}
+.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin-bottom:4px;font-family:'IBM Plex Mono',monospace;}
+.field input[type=text]{width:100%;padding:7px 9px;border:1.5px solid var(--rule-strong);border-radius:4px;font-size:13.5px;font-family:'IBM Plex Mono',monospace;background:var(--paper-raised);color:var(--ink);}
+.field input:focus{outline:none;border-color:var(--ink);}
+
+.btn{padding:9px 16px;border-radius:4px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;font-weight:600;font-size:13.5px;transition:transform .08s ease,opacity .15s;font-family:'IBM Plex Sans',sans-serif;}
+.btn:hover{opacity:.88;}
+.btn:active{transform:translateY(1px);}
+.btn.ghost{background:transparent;color:var(--ink);}
+.btn.ghost:hover{background:rgba(0,0,0,0.06);}
+.btn.small{padding:5px 10px;font-size:12px;}
+.btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+
+.status-line{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-soft);margin-top:10px;white-space:pre-wrap;}
+.status-line.err{color:var(--red);}
+.status-line.ok{color:var(--green-ink);}
+
+.badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.03em;padding:2px 8px;border-radius:10px;font-weight:600;}
+.badge.ok{background:var(--green-bg);color:var(--green-ink);}
+.badge.warn{background:var(--amber-bg);color:var(--amber);}
+.badge.err{background:var(--red-bg);color:var(--red);}
+.badge.info{background:var(--accent-bg);color:var(--accent);}
+
+.summary-row{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0;font-size:13px;}
+.summary-row .item .k{color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:.03em;font-family:'IBM Plex Mono',monospace;}
+.summary-row .item .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;}
+
+table.preview{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+table.preview th{text-align:left;padding:7px 8px;border-bottom:1.5px solid var(--rule-strong);font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);position:sticky;top:0;background:var(--paper-raised);white-space:nowrap;}
+table.preview th.sortable{cursor:pointer;user-select:none;}
+table.preview th.sortable:hover{color:var(--ink);}
+table.preview th.sortable .arrow{color:var(--accent);}
+.table-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.table-toolbar input[type=search]{flex:1;max-width:320px;padding:7px 9px;border:1.5px solid var(--rule-strong);border-radius:4px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;background:var(--paper-raised);color:var(--ink);}
+.table-toolbar input[type=search]:focus{outline:none;border-color:var(--ink);}
+.table-toolbar .count{font-size:11.5px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+table.preview td{padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top;}
+table.preview td.num{text-align:right;font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+table.preview tr.flag{background:var(--amber-bg);}
+table.preview tr.excluded{opacity:.4;}
+.dropzone.small-drop{padding:16px;}
+.table-wrap{max-height:520px;overflow:auto;border:1px solid var(--rule);border-radius:4px;}
+.cell-input{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:3px 5px;border:1.5px solid transparent;border-radius:3px;background:transparent;width:100%;min-width:70px;color:var(--ink);}
+.cell-input:hover{border-color:var(--rule-strong);}
+.cell-input:focus{outline:none;border-color:var(--ink);background:var(--paper-raised);}
+.cell-input.num{text-align:right;font-weight:600;}
+.cell-input.wide{min-width:220px;}
+td.cell{padding:2px 4px;}
+
+.hidden{display:none !important;}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:0 0 12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;}
+.help{font-size:12px;color:var(--ink-soft);line-height:1.5;margin-bottom:14px;}
+.help b{color:var(--ink);}
+footer{margin-top:30px;font-size:11.5px;color:var(--ink-soft);text-align:center;}
+code{background:var(--paper);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>Lançamentos Vidal Adv</h1>
+      <div class="sub">Processamento 100% local no navegador — lê o extrato da conta corrente (Banco Inter) e gera os lançamentos de razão pro Domínio, casando cada linha contra um cadastro editável de padrões (mesma arquitetura das outras ferramentas do Hub).</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <a class="backlink" href="https://criconcontabilidade.github.io/Cricon-Ferramentas/" onclick="window.close(); setTimeout(function(){ location.href='https://criconcontabilidade.github.io/Cricon-Ferramentas/'; }, 250); return false;" id="hubLink">← Hub de Ferramentas</a>
+      <div class="cricon-brand">
+        <svg viewBox="0 0 141 109" xmlns="http://www.w3.org/2000/svg"><path d="M 15.33 33.25 L 9.50 52.58 L 11.33 74.33 L 19.08 90.67 L 36.17 102.92 L 57.25 104.92 L 73.25 100.08 L 84.92 104.83 L 100.25 104.83 L 115.75 97.92 L 126.00 85.67 L 129.92 74.17 L 130.25 61.92 L 60.92 62.08 L 62.42 49.00 L 130.58 48.75 L 129.92 37.75 L 126.75 29.75 L 118.33 20.33 L 111.42 16.33 L 97.92 12.75 L 88.58 12.67 L 72.58 18.17 L 59.83 13.67 L 41.33 13.58 L 26.42 20.42 Z M 78.58 93.58 L 86.00 80.08 L 86.00 78.42 L 87.00 77.08 L 87.00 74.33 L 87.92 72.75 L 88.33 69.50 L 120.42 69.42 L 121.00 69.92 L 121.08 74.17 L 120.17 75.42 L 120.08 77.17 L 119.25 78.25 L 119.25 79.58 L 117.33 83.67 L 115.83 85.17 L 114.75 87.33 L 111.33 90.75 L 109.25 91.75 L 108.08 92.92 L 102.33 95.92 L 100.33 96.00 L 98.50 97.00 L 85.58 97.00 L 84.42 96.00 L 82.58 95.92 Z M 62.33 69.50 L 78.42 69.42 L 79.25 70.08 L 79.25 70.92 L 78.33 72.58 L 78.33 74.25 L 77.42 75.42 L 77.42 77.00 L 76.50 78.25 L 76.58 79.67 L 76.00 80.33 L 75.58 81.67 L 74.92 82.33 L 74.67 83.58 L 73.92 84.33 L 73.58 85.50 L 71.67 87.58 L 71.17 87.50 L 70.75 87.00 L 69.92 86.67 L 69.00 85.25 L 66.75 82.83 L 66.25 81.42 L 63.83 77.00 L 63.75 75.25 L 62.83 74.17 L 62.83 71.67 L 61.92 70.58 L 61.92 69.92 Z M 20.17 69.75 L 20.58 69.42 L 52.00 69.67 L 52.83 70.58 L 53.17 72.50 L 54.08 73.67 L 54.17 75.50 L 55.08 76.50 L 55.00 78.17 L 56.00 80.75 L 59.67 86.42 L 60.00 87.83 L 61.58 89.33 L 61.83 90.58 L 63.50 92.33 L 63.42 93.75 L 62.58 94.83 L 61.33 95.08 L 60.33 96.00 L 58.42 96.08 L 57.42 97.00 L 43.83 97.00 L 42.58 96.00 L 41.00 96.00 L 39.75 95.08 L 38.42 95.08 L 36.25 94.08 L 34.75 92.67 L 30.33 90.25 L 26.67 86.50 L 26.42 85.33 L 23.08 81.00 L 22.83 79.08 L 21.00 76.25 L 20.92 73.83 L 20.00 72.50 Z M 19.08 50.08 L 20.42 49.00 L 51.83 49.08 L 52.33 49.58 L 52.25 55.25 L 51.42 57.83 L 51.42 61.17 L 50.67 61.83 L 18.58 61.83 L 18.08 61.33 L 18.08 58.58 L 19.08 56.17 Z M 72.67 28.83 L 75.50 31.67 L 76.58 33.58 L 77.42 34.58 L 77.58 36.42 L 78.42 37.50 L 78.33 38.92 L 79.33 40.33 L 79.25 41.00 L 78.50 41.42 L 65.25 41.33 L 64.67 40.58 L 64.58 39.67 L 65.42 38.50 L 65.67 37.42 L 66.42 36.50 L 66.58 35.50 L 68.00 33.92 L 68.50 32.58 L 72.00 29.00 Z M 80.17 23.67 L 81.50 22.33 L 82.75 22.00 L 83.75 21.17 L 85.50 21.08 L 86.58 20.17 L 99.25 20.17 L 100.33 21.08 L 103.00 21.17 L 104.25 22.08 L 107.75 23.08 L 109.42 24.67 L 112.67 26.00 L 117.08 30.42 L 120.17 35.50 L 120.17 37.00 L 121.17 38.50 L 121.08 40.83 L 120.42 41.42 L 88.50 41.42 L 87.92 40.67 L 87.92 38.33 L 86.92 36.92 L 86.92 34.50 L 86.17 33.75 L 84.75 30.33 L 80.75 25.42 Z M 64.58 23.67 L 63.33 26.33 L 61.08 28.58 L 60.67 29.83 L 59.17 31.33 L 58.75 32.75 L 57.33 34.33 L 56.08 37.00 L 55.92 38.33 L 55.08 39.25 L 55.08 40.75 L 54.42 41.42 L 22.58 41.50 L 22.17 41.17 L 22.92 39.42 L 22.83 38.42 L 26.83 31.42 L 33.17 25.17 L 41.00 21.17 L 43.58 21.08 L 44.75 20.17 L 57.50 20.17 L 58.92 21.00 L 60.83 21.17 L 63.08 22.17 Z" fill="#5D4232" fill-rule="evenodd"/></svg>
+        <div class="cw"><div class="nm">Contabilidade Cricon</div><div class="tg">Contabilizando seu sucesso!</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== UPLOAD ===================== -->
+  <div class="card">
+    <div class="section-title">Extrato do mês</div>
+    <div class="help">Carregue o extrato da conta corrente Banco Inter (PDF) e clique em <b>Processar</b>. Recebimentos de clientes (honorários) e resgates de aplicação (CDB DI) ficam fora do escopo desta ferramenta — são lançados à parte.</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Extrato Conta Corrente Banco Inter (PDF)</label>
+        <div class="dropzone small-drop" id="extratoDrop"><div class="big">Arraste o PDF aqui</div><div class="small">Lê todas as linhas do período</div><input type="file" id="extratoFile" accept="application/pdf"></div>
+      </div>
+      <div class="field">
+        <label>Código Emp. (Domínio)</label>
+        <input type="text" id="codEmp" value="209">
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn" id="processBtn" onclick="processarTudo()">Processar</button></div>
+    <div id="uploadStatus" class="status-line hidden"></div>
+  </div>
+
+  <div class="card hidden" id="resultCard"></div>
+
+  <!-- ===================== CADASTRO: PADRÕES DO EXTRATO ===================== -->
+  <div class="card">
+    <div class="section-title">Cadastro — Padrões do Extrato Bancário</div>
+    <div class="help">De-para de palavra-chave (histórico/favorecido) → conta de débito fixa (o crédito é sempre a conta banco, <b id="bankContaLabel"></b>). "Período" define o mês usado no histórico: <b>Atual</b> = mês do pagamento, <b>Anterior</b> = mês anterior ao pagamento. O que não bate com nenhuma regra vira uma linha só com a conta banco preenchida, para completar à mão.</div>
+    <div class="table-wrap"><table class="preview" id="padroesTable"></table></div>
+    <div class="btn-row">
+      <button class="btn" onclick="addPadraoRow()">+ Novo padrão</button>
+    </div>
+  </div>
+
+  <!-- ===================== CADASTRO: PRÓ-LABORE FIXO (Renata) ===================== -->
+  <div class="card">
+    <div class="section-title">Cadastro — Pró-labore fixo (Renata Angelo Felisberto Vidal)</div>
+    <div class="help">O Pix enviado pra Renata pode ser <b>pró-labore</b> (já lançado por outra rotina, ignorado aqui) ou <b>adiantamento de lucros</b> (D32/C<span class="bankContaInline"></span>). Como o texto do extrato é idêntico nos dois casos, a ferramenta diferencia pelo <b>valor</b>: qualquer Pix pra Renata cujo valor bata exatamente com o pró-labore cadastrado abaixo é ignorado; qualquer outro valor vira adiantamento de lucros. <b>Atualize este valor sempre que o pró-labore contratual mudar</b> — se ficar desatualizado, um pró-labore reajustado passa a cair (errado) como participação nos lucros.</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Valor do pró-labore (R$)</label>
+        <input type="text" id="prolaboreValor" onchange="updateProlaboreValor(this.value)">
+      </div>
+    </div>
+    <div id="prolaboreStatus" class="status-line hidden"></div>
+  </div>
+
+  <!-- ===================== CADASTRO: IGNORAR ===================== -->
+  <div class="card">
+    <div class="section-title">Cadastro — Ignorar por completo</div>
+    <div class="help">Nomes/históricos que nunca geram lançamento nesta ferramenta (já lançados por outra rotina, ou fora de escopo): honorários da contadora, INSS/Simples Nacional via Receita Federal, resgates de aplicação CDB DI. Recebimentos de clientes (Pix recebido) também ficam sempre fora, automaticamente.</div>
+    <div class="table-wrap"><table class="preview" id="ignorarTable"></table></div>
+    <div class="btn-row">
+      <button class="btn" onclick="addIgnorarRow()">+ Novo termo a ignorar</button>
+    </div>
+  </div>
+
+  <!-- ===================== BAIXA DE SERVIÇOS ===================== -->
+  <div class="card">
+    <div class="section-title">Baixa de Serviços (recebimentos de clientes) <span id="cloudStatus" class="badge info">Conectando…</span></div>
+    <div class="help">Casa os recebimentos do extrato da conta corrente (Pix recebido) com o relatório <b>Contas a Receber por Cliente</b> do Domínio, nesta ordem: <b>1)</b> nome do pagador no extrato igual ao nome do título, <b>2)</b> sobrenome igual, <b>3)</b> valor recebido igual ao valor do título. Gera <code>baixa_ser.txt</code>. O cadastro de CNPJ de clientes é compartilhado com o resto do escritório.</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Contas a Receber por Cliente (PDF)</label>
+        <div class="dropzone small-drop" id="contasReceberDrop"><div class="big">Arraste o PDF aqui</div><div class="small">Lê sozinho a empresa (CNPJ) do cabeçalho do relatório</div><input type="file" id="contasReceberFile" accept="application/pdf"></div>
+      </div>
+      <div class="field">
+        <label>Extrato Conta Corrente Banco Inter (PDF)</label>
+        <div class="dropzone small-drop" id="extratoServicosDrop"><div class="big">Arraste o PDF aqui</div><div class="small">Pode ser o mesmo extrato usado nos lançamentos acima</div><input type="file" id="extratoServicosFile" accept="application/pdf"></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn" id="processServicosBtn" disabled onclick="processarBaixaServicos()">Processar</button></div>
+    <div id="servicosStatus" class="status-line hidden"></div>
+  </div>
+
+  <div class="card hidden" id="resultServicosCard"></div>
+
+  <!-- ===================== CADASTRO CNPJ (fallback) ===================== -->
+  <div class="card hidden" id="cnpjHelperCard">
+    <div class="section-title">CNPJs não encontrados — importar cadastro</div>
+    <div class="help">Sobraram clientes sem CNPJ resolvido. Solte aqui o relatório de <b>Clientes</b> do Domínio <b id="cnpjHelperEmpresa"></b> — já sei o CNPJ da Vidal Adv pelo relatório de Contas a Receber, então não precisa digitar nada. Isso atualiza o cadastro compartilhado do escritório e já resolve as linhas pendentes na hora.</div>
+    <div class="dropzone small-drop" id="cadPdfDrop"><div class="big">Arraste o PDF de Clientes aqui</div><input type="file" id="cadPdfFile" accept="application/pdf"></div>
+    <div id="cadPdfStatus" class="status-line hidden"></div>
+  </div>
+
+  <!-- ===================== APLICAÇÕES (RENDA FIXA) ===================== -->
+  <div class="card">
+    <div class="section-title">Rendimentos de Aplicações (Renda Fixa)</div>
+    <div class="help">Cada aplicação (CDB) tem sua própria conta no Ativo. Carregue os dois relatórios do Banco Inter do mês: <b>Movimentação</b> (traz os rendimentos diários por CDB) e <b>Posição</b> (traz o número da Nota de cada CDB ainda aberto, usado pra achar a conta certa). Resgates e IR retido são ignorados — só o rendimento acumulado do mês de cada aplicação vira lançamento, sempre no <b>último dia do mês</b>: D-conta da aplicação / C-395 (Renda de Aplicação Financeira). CDB que fechou totalmente durante o mês (não aparece mais na Posição) é ignorado por completo, inclusive o rendimento dele.</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Extrato de Movimentação de Renda Fixa (PDF)</label>
+        <div class="dropzone small-drop" id="movDrop"><div class="big">Arraste o PDF aqui</div><input type="file" id="movFile" accept="application/pdf"></div>
+      </div>
+      <div class="field">
+        <label>Extrato de Posição de Renda Fixa (PDF)</label>
+        <div class="dropzone small-drop" id="posDrop"><div class="big">Arraste o PDF aqui</div><input type="file" id="posFile" accept="application/pdf"></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn" id="processAplicBtn" onclick="processarAplicacoes()">Processar Aplicações</button></div>
+    <div id="aplicUploadStatus" class="status-line hidden"></div>
+  </div>
+
+  <div class="card hidden" id="resultAplicCard"></div>
+
+  <!-- ===================== CADASTRO: NOTA → CONTA ===================== -->
+  <div class="card">
+    <div class="section-title">Cadastro — Nota da Aplicação → Conta</div>
+    <div class="help">De-para do número da Nota (CDB) pra conta do Ativo. Quando aparecer uma aplicação nova (Nota sem conta cadastrada), a linha entra pendente na tabela de resultado — crie a conta no plano de contas do Domínio e cadastre o número aqui antes de importar.</div>
+    <div class="table-wrap"><table class="preview" id="notasTable"></table></div>
+    <div class="btn-row">
+      <button class="btn" onclick="addNotaRow()">+ Nova nota</button>
+    </div>
+  </div>
+
+  <footer>Lançamentos Vidal Adv · Cricon Contabilidade — uso interno</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const BANK_CONTA = 23; // Banco Inter C/C 33806936-4
+
+/* =========================================================================
+   HELPERS: valores / datas / download (mesma lógica das outras ferramentas do Hub)
+   ========================================================================= */
+function parseBRL(str){
+  if(str==null) return null;
+  str = String(str).trim();
+  if(str==="" || str==="-" || str==="–") return null;
+  const neg = /^-/.test(str) || /^\(.*\)$/.test(str);
+  str = str.replace(/[()\-]/g,"").replace(/R\$/g,"").replace(/\s+/g,"").replace(/\./g,"").replace(",",".").trim();
+  const n = parseFloat(str);
+  if(isNaN(n)) return null;
+  return neg ? -n : n;
+}
+function fmtBRL(n){
+  if(n==null || isNaN(n)) return "";
+  return n.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtValorTxt(n){
+  if(n==null || n==="" || isNaN(n)) return "0";
+  const r = Math.round(Number(n)*100)/100;
+  if(r === 0) return "0";
+  if(Number.isInteger(r)) return String(r);
+  return r.toFixed(2).replace(".",",");
+}
+function fmtDateBR(dt){ if(!dt) return ""; return `${String(dt.d).padStart(2,"0")}/${String(dt.m).padStart(2,"0")}/${dt.y}`; }
+function brParts(str){
+  const m = String(str).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if(!m) return null;
+  let [_,dd,mm,yy] = m;
+  if(yy.length===2) yy = (parseInt(yy)>50 ? "19":"20")+yy;
+  return {y:parseInt(yy), m:parseInt(mm), d:parseInt(dd)};
+}
+function partsToDate(dt){ return new Date(Date.UTC(dt.y, dt.m-1, dt.d)); }
+function downloadText(filename, content, mime){
+  const blob = new Blob([content], {type: mime||"text/plain;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+// O Domínio lê os TXT de importação como ANSI (Windows-1252) — sem isso, todo acento sai
+// trocado. Como só usamos letras acentuadas do português (todas ≤ 0xFF, iguais em Latin-1 e
+// Windows-1252 nessa faixa), converte char a char pro byte correspondente.
+function downloadTextAnsi(filename, content){
+  const bytes = new Uint8Array(content.length);
+  for(let i=0;i<content.length;i++){
+    const code = content.charCodeAt(i);
+    bytes[i] = code <= 0xFF ? code : 0x3F;
+  }
+  const blob = new Blob([bytes], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function downloadXlsx(filename, rowsAoA, sheetName){
+  const ws = XLSX.utils.aoa_to_sheet(rowsAoA);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName||"Sheet1");
+  XLSX.writeFile(wb, filename);
+}
+// Remove acentos (inclusive Ç→C) de texto que vai pro TXT de importação do Domínio.
+function stripAccents(s){ return String(s??"").normalize("NFD").replace(/[̀-ͯ]/g,""); }
+function normalizeText(s){
+  return (s||"").toString().normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase().trim();
+}
+function flatText(s){ return normalizeText(s).replace(/[^A-Z0-9]/g,""); }
+function ultimoDiaMes(y,m){ return new Date(y,m,0).getDate(); }
+// "anterior" = mês/ano do lançamento é o mês ANTERIOR ao do pagamento; "atual" = mesmo mês.
+function mesAnoRef(data, periodo){
+  let m = data.m, y = data.y;
+  if(periodo === "anterior"){ m -= 1; if(m<1){ m = 12; y -= 1; } }
+  return `${String(m).padStart(2,"0")}/${y}`;
+}
+function aplicarHist(template, mesAno){ return mesAno ? (template||"").replace("{MM}/{YYYY}", mesAno) : (template||""); }
+
+/* ---- tabela: filtro/ordenação genéricos ---- */
+function makeTableState(){ return {filter:"", sortCol:null, sortDir:1}; }
+function sortValue(v){ return v && typeof v==="object" && "y" in v ? partsToDate(v).getTime() : v; }
+function filterSortRows(rows, state, getSearchable){
+  let indexed = rows.map((row,idx)=>({row, idx}));
+  const needle = normalizeText((state.filter||"").trim());
+  if(needle) indexed = indexed.filter(({row})=> getSearchable(row).some(v=>normalizeText(String(v??"")).includes(needle)));
+  if(state.sortCol){
+    indexed.sort((a,b)=>{
+      const va = sortValue(a.row[state.sortCol]), vb = sortValue(b.row[state.sortCol]);
+      if(va==null && vb==null) return 0;
+      if(va==null) return 1;
+      if(vb==null) return -1;
+      if(typeof va === "number" && typeof vb === "number") return (va-vb)*state.sortDir;
+      return String(va).localeCompare(String(vb), "pt-BR", {numeric:true})*state.sortDir;
+    });
+  }
+  return indexed;
+}
+function toggleSort(state, col, rerenderFn){
+  if(state.sortCol===col){ state.sortDir *= -1; } else { state.sortCol = col; state.sortDir = 1; }
+  rerenderFn();
+}
+function sortTh(stateVarName, state, col, label, rerenderFnName){
+  const arrow = state.sortCol===col ? `<span class="arrow">${state.sortDir===1?"▲":"▼"}</span>` : "";
+  return `<th class="sortable" onclick="toggleSort(${stateVarName},'${col}',${rerenderFnName})">${label} ${arrow}</th>`;
+}
+
+// "onFile" é opcional: quando informado, roda tanto no clique (input "change")
+// quanto no arrastar-e-soltar. Sem isso, setar input.files no "drop" NÃO dispara
+// "change" sozinho — uma tela que só escuta "change" pra processar o arquivo
+// nunca reage a um arquivo largado por drag-and-drop, mesmo mostrando o nome
+// como "carregado".
+function wireDropzone(dropId, inputId, onFile){
+  const drop = document.getElementById(dropId);
+  const input = document.getElementById(inputId);
+  drop.addEventListener("click", ()=>input.click());
+  drop.addEventListener("dragover", e=>{ e.preventDefault(); drop.classList.add("drag"); });
+  drop.addEventListener("dragleave", ()=> drop.classList.remove("drag"));
+  drop.addEventListener("drop", e=>{
+    e.preventDefault(); drop.classList.remove("drag");
+    const f = e.dataTransfer.files[0];
+    if(f){
+      input.files = e.dataTransfer.files;
+      markDropDone(drop, f.name);
+      if(onFile) onFile(f, drop);
+    }
+  });
+  input.addEventListener("change", ()=>{
+    const f = input.files[0];
+    if(f){ markDropDone(drop, f.name); if(onFile) onFile(f, drop); }
+  });
+}
+function markDropDone(drop, label){
+  drop.classList.add("done");
+  drop.querySelector(".big").textContent = "✓ " + label;
+}
+wireDropzone("extratoDrop","extratoFile");
+
+/* ---- PDF: extração de linhas de texto (agrupadas por Y, ordenadas por X) ---- */
+async function extractPdfPageLines(pdf, pageNum){
+  const page = await pdf.getPage(pageNum);
+  const content = await page.getTextContent();
+  const rows = {};
+  content.items.forEach(it=>{
+    const y = Math.round(it.transform[5]);
+    if(!rows[y]) rows[y] = [];
+    rows[y].push({x:it.transform[4], text:it.str});
+  });
+  const ys = Object.keys(rows).map(Number).sort((a,b)=>b-a);
+  return ys.map(y=> rows[y].sort((a,b)=>a.x-b.x).map(t=>t.text).join(" ").replace(/\s+/g," ").trim() ).filter(l=>l.length>0);
+}
+async function extractPdfAllLines(file){
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+  const pages = [];
+  for(let p=1;p<=pdf.numPages;p++) pages.push(await extractPdfPageLines(pdf, p));
+  return pages;
+}
+
+/* =========================================================================
+   CADASTRO — PADRÕES DO EXTRATO (simples: palavra-chave → conta débito fixa)
+   ========================================================================= */
+const PADROES_SEED = [
+  {keywords:["CONTATO INTERNET"], debito:454, periodo:"anterior", hist:"PAGAMENTO REF. INTERNET {MM}/{YYYY} - CONTATO (PERIODO MES ANTERIOR)"},
+  {keywords:["CELESC"], debito:344, periodo:"anterior", hist:"PAGAMENTO REF. FATURA DE ENERGIA ELETRICA {MM}/{YYYY} - CELESC (PERIODO MES ANTERIOR)"},
+  {keywords:["PJBANK"], debito:351, periodo:null, hist:"PAGAMENTO REF. CONDOMINIO - SALA TERMINAL CENTRAL"},
+];
+function loadPadroes(){
+  const raw = localStorage.getItem("vidal_padroes_banco");
+  const salvo = raw ? JSON.parse(raw) : [];
+  const chaves = new Set(salvo.map(p=>(p.keywords||[]).join("|")));
+  const novos = PADROES_SEED.filter(p=>!chaves.has((p.keywords||[]).join("|"))).map(p=>({...p}));
+  const combinado = [...salvo, ...novos];
+  if(novos.length) savePadroes(combinado);
+  return combinado;
+}
+function savePadroes(list){ localStorage.setItem("vidal_padroes_banco", JSON.stringify(list)); }
+let padroesDB = loadPadroes();
+function renderPadroesTable(){
+  const tbl = document.getElementById("padroesTable");
+  tbl.innerHTML = `<thead><tr>
+      <th>Palavras-chave (histórico/favorecido)</th><th>Conta Débito</th><th>Período</th><th>Histórico</th><th></th>
+    </tr></thead><tbody>` +
+    padroesDB.map((p,i)=>`<tr>
+      <td class="cell"><input class="cell-input wide" value="${(p.keywords||[]).join(', ')}" onchange="updatePadraoKeywords(${i},this.value)"></td>
+      <td class="cell"><input class="cell-input" style="width:70px" value="${p.debito??''}" onchange="updatePadrao(${i},'debito',this.value)"></td>
+      <td class="cell">
+        <select class="cell-input" onchange="updatePadrao(${i},'periodo',this.value)">
+          <option value="" ${!p.periodo?"selected":""}>— (sem mês no histórico)</option>
+          <option value="atual" ${p.periodo==="atual"?"selected":""}>Atual (mês do pagamento)</option>
+          <option value="anterior" ${p.periodo==="anterior"?"selected":""}>Anterior ao pagamento</option>
+        </select>
+      </td>
+      <td class="cell"><input class="cell-input wide" value="${p.hist||''}" onchange="updatePadrao(${i},'hist',this.value)"></td>
+      <td><button class="btn small ghost" onclick="removePadraoRow(${i})">✕</button></td>
+    </tr>`).join("") + `</tbody>`;
+}
+function updatePadrao(i, field, val){
+  if(field==="debito"){ padroesDB[i][field] = String(val).trim()===""?null:Number(val); }
+  else if(field==="periodo"){ padroesDB[i][field] = val===""?null:val; }
+  else { padroesDB[i][field] = val; }
+  savePadroes(padroesDB);
+}
+function updatePadraoKeywords(i, val){ padroesDB[i].keywords = val.split(",").map(s=>s.trim()).filter(Boolean); savePadroes(padroesDB); }
+function addPadraoRow(){ padroesDB.push({keywords:[], debito:null, periodo:null, hist:""}); savePadroes(padroesDB); renderPadroesTable(); }
+function removePadraoRow(i){ padroesDB.splice(i,1); savePadroes(padroesDB); renderPadroesTable(); }
+
+/* =========================================================================
+   CADASTRO — PRÓ-LABORE FIXO (Renata Angelo Felisberto Vidal)
+   ========================================================================= */
+const RENATA_KEYWORD = "RENATA ANGELO FELISBERTO VIDAL";
+function loadProlaboreValor(){
+  const raw = localStorage.getItem("vidal_prolabore_valor");
+  return raw ? parseFloat(raw) : 1442.69;
+}
+function saveProlaboreValor(v){ localStorage.setItem("vidal_prolabore_valor", String(v)); }
+let prolaboreValor = loadProlaboreValor();
+function updateProlaboreValor(val){
+  const n = parseBRL(val);
+  const status = document.getElementById("prolaboreStatus");
+  status.classList.remove("hidden","err","ok");
+  if(n==null || n<=0){ status.classList.add("err"); status.textContent = "Valor inválido."; return; }
+  prolaboreValor = n; saveProlaboreValor(n);
+  status.classList.add("ok"); status.textContent = "Pró-labore atualizado para R$ " + fmtBRL(n) + ".";
+}
+
+/* =========================================================================
+   CADASTRO — IGNORAR POR COMPLETO
+   ========================================================================= */
+const IGNORAR_SEED = ["PJBANK PAGAMENTOS S A","RECEITA FEDERAL","CDB DI LIQ BANCO INTER"];
+function loadIgnorar(){
+  const raw = localStorage.getItem("vidal_ignorar_banco");
+  const salvo = raw ? JSON.parse(raw) : null;
+  if(!salvo) { saveIgnorar(IGNORAR_SEED.slice()); return IGNORAR_SEED.slice(); }
+  const set = new Set(salvo.map(normalizeText));
+  const novos = IGNORAR_SEED.filter(k=>!set.has(normalizeText(k)));
+  const combinado = [...salvo, ...novos];
+  if(novos.length) saveIgnorar(combinado);
+  return combinado;
+}
+function saveIgnorar(list){ localStorage.setItem("vidal_ignorar_banco", JSON.stringify(list)); }
+let ignorarDB = loadIgnorar();
+function renderIgnorarTable(){
+  const tbl = document.getElementById("ignorarTable");
+  tbl.innerHTML = `<thead><tr><th>Termo/nome ignorado no extrato</th><th></th></tr></thead><tbody>` +
+    ignorarDB.map((k,i)=>`<tr>
+      <td class="cell"><input class="cell-input wide" value="${k}" onchange="updateIgnorarRow(${i},this.value)"></td>
+      <td><button class="btn small ghost" onclick="removeIgnorarRow(${i})">✕</button></td>
+    </tr>`).join("") + `</tbody>`;
+}
+function updateIgnorarRow(i, val){ ignorarDB[i] = val; saveIgnorar(ignorarDB); }
+function addIgnorarRow(){ ignorarDB.push(""); saveIgnorar(ignorarDB); renderIgnorarTable(); }
+function removeIgnorarRow(i){ ignorarDB.splice(i,1); saveIgnorar(ignorarDB); renderIgnorarTable(); }
+
+/* =========================================================================
+   PARSER — EXTRATO CONTA CORRENTE BANCO INTER
+   Formato: cabeçalho "D de Mês de AAAA Saldo do dia: R$ ..." seguido de linhas
+   'Tipo: "Favorecido" -R$ Valor -R$ SaldoPorTransacao' (crédito sem o sinal "-").
+   ========================================================================= */
+const MESES_PT = {JANEIRO:1,FEVEREIRO:2,MARCO:3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
+const DATA_HEADER_RE = /^(\d{1,2})\s+de\s+([A-Za-zçÇÀ-ſ]+)\s+de\s+(\d{4})\b/;
+const TRANSACAO_RE = /^(.+?):\s*"(.+?)"\s+(-?R\$\s?[\d.,]+)\s+(-?R\$\s?[\d.,]+)$/;
+async function parseExtratoVidal(file){
+  const pages = await extractPdfAllLines(file);
+  const allLines = pages.flat();
+  const linhas = [];
+  let dataAtual = null;
+  for(const line of allLines){
+    const dm = line.match(DATA_HEADER_RE);
+    if(dm){
+      const mesNum = MESES_PT[normalizeText(dm[2])];
+      if(mesNum) dataAtual = {y:parseInt(dm[3]), m:mesNum, d:parseInt(dm[1])};
+      continue;
+    }
+    const tm = line.match(TRANSACAO_RE);
+    if(!tm || !dataAtual) continue;
+    const [, tipo, favorecido, valorStr] = tm;
+    const valor = parseBRL(valorStr);
+    if(valor==null) continue;
+    linhas.push({data:dataAtual, tipo:tipo.trim(), favorecido:favorecido.trim(), valor});
+  }
+  return linhas;
+}
+function isRecebimentoCliente(tipo){
+  return normalizeText(tipo).includes("PIX RECEBIDO") || normalizeText(tipo).includes("TRANSFERENCIA RECEBIDA") || normalizeText(tipo)==="COBRANCA";
+}
+function buildBancoEntries(linhas, bankConta){
+  const rows = []; let ignoradas = 0, recebimentosClientes = 0;
+  linhas.forEach(l=>{
+    const norm = normalizeText(l.tipo + " " + l.favorecido);
+
+    if(ignorarDB.some(kw=> kw && norm.includes(normalizeText(kw)))){ ignoradas++; return; }
+
+    // Pix pra Renata: mesmo texto pra pró-labore (ignorado, valor fixo cadastrado)
+    // e adiantamento de lucros (D32) — diferenciados só pelo valor.
+    if(l.valor < 0 && norm.includes(RENATA_KEYWORD)){
+      if(Math.abs(Math.abs(l.valor) - prolaboreValor) < 0.005){ ignoradas++; return; }
+      rows.push({data:l.data, debito:32, credito:bankConta, valor:Math.abs(l.valor), hist:"PAGAMENTO REF. ADTO DE LUCRO A SOCIA - RENATA ANGELO F. VIDAL", complemento:null, iniciaLote:1, flag:false, statusText:"OK (adiantamento de lucros — Renata)"});
+      return;
+    }
+
+    const padrao = padroesDB.find(p=>(p.keywords||[]).some(k=>k && norm.includes(normalizeText(k))));
+    if(padrao){
+      const hist = aplicarHist(padrao.hist, padrao.periodo ? mesAnoRef(l.data, padrao.periodo) : null);
+      rows.push({data:l.data, debito:padrao.debito, credito:bankConta, valor:Math.abs(l.valor), hist, complemento:null, iniciaLote:1, flag: padrao.debito==null, statusText: padrao.debito==null ? "Padrão sem conta débito cadastrada" : "OK (padrão cadastrado)"});
+      return;
+    }
+
+    // Recebimento de cliente (honorários) — fora do escopo desta ferramenta.
+    if(l.valor > 0 && isRecebimentoCliente(l.tipo)){ ignoradas++; recebimentosClientes++; return; }
+
+    // fallback: não reconhecido — só a conta banco é preenchida, resto à mão
+    const d = l.valor < 0 ? null : bankConta;
+    const c = l.valor < 0 ? bankConta : null;
+    rows.push({data:l.data, debito:d, credito:c, valor:Math.abs(l.valor), hist:null, complemento:(l.tipo+" — "+l.favorecido), iniciaLote:1, flag:true, statusText:"Sem padrão — complete a outra conta à mão"});
+  });
+  return {rows, ignoradas, recebimentosClientes};
+}
+
+/* =========================================================================
+   PROCESSAMENTO
+   ========================================================================= */
+function setUploadStatus(msg, cls){
+  const el = document.getElementById("uploadStatus");
+  el.textContent = msg; el.className = "status-line" + (cls?(" "+cls):"");
+  el.classList.remove("hidden");
+}
+async function processarTudo(){
+  const extratoFile = document.getElementById("extratoFile").files[0];
+  if(!extratoFile){
+    setUploadStatus("Carregue o extrato antes de processar.", "err");
+    return;
+  }
+  setUploadStatus("Processando...");
+  try{
+    const linhas = await parseExtratoVidal(extratoFile);
+    if(!linhas.length) throw new Error("Não encontrei nenhum lançamento no extrato.");
+    const {rows, ignoradas, recebimentosClientes} = buildBancoEntries(linhas, BANK_CONTA);
+    rows.sort((a,b)=>{
+      const da = a.data ? partsToDate(a.data).getTime() : 0;
+      const db = b.data ? partsToDate(b.data).getTime() : 0;
+      return da - db;
+    });
+    lancRowsState = rows;
+    lancIgnoradasState = ignoradas;
+    lancRecebimentosState = recebimentosClientes;
+    renderLancResult();
+    setUploadStatus(`${rows.length} lançamento(s) gerado(s).`, "ok");
+  }catch(err){
+    setUploadStatus("Erro: " + err.message, "err");
+  }
+}
+
+/* ---- Tabela de resultado (editável) ---- */
+let lancRowsState = [];
+let lancIgnoradasState = 0;
+let lancRecebimentosState = 0;
+let lancTableState = makeTableState();
+function renderLancResult(){
+  document.getElementById("resultCard").classList.remove("hidden");
+  lancTableState = makeTableState();
+  renderLancTable();
+}
+function renderLancTable(){
+  const box = document.getElementById("resultCard");
+  const rows = lancRowsState;
+  const nFlag = rows.filter(r=>r.flag).length;
+  const indexed = filterSortRows(rows, lancTableState, r=>[r.debito,r.credito,r.hist,r.complemento]);
+  let html = `<div class="section-title">Lançamentos gerados</div>
+  <div class="summary-row">
+    <div class="item"><div class="k">Linhas</div><div class="v">${rows.length}</div></div>
+    <div class="item"><div class="k">Pra conferir</div><div class="v">${nFlag}</div></div>
+    <div class="item"><div class="k">Ignoradas (regra)</div><div class="v">${lancIgnoradasState}</div></div>
+    <div class="item"><div class="k">Recebimentos de clientes (fora de escopo)</div><div class="v">${lancRecebimentosState}</div></div>
+  </div>
+  <div class="help">Linhas em amarelo faltam completar (conta em branco, padrão não cadastrado) — edite direto na tabela, ou cadastre o padrão que falta abaixo e reprocesse.</div>
+  <div class="table-toolbar"><input type="search" value="${lancTableState.filter}" placeholder="Filtrar por conta ou histórico..." oninput="lancTableState.filter=this.value; renderLancTable();"><span class="count">${indexed.length===rows.length?`${rows.length} linha(s)`:`${indexed.length} de ${rows.length}`}</span></div>
+  <div class="table-wrap"><table class="preview"><thead><tr>
+    ${sortTh('lancTableState',lancTableState,'data','Data','renderLancTable')}
+    ${sortTh('lancTableState',lancTableState,'debito','Débito','renderLancTable')}
+    ${sortTh('lancTableState',lancTableState,'credito','Crédito','renderLancTable')}
+    ${sortTh('lancTableState',lancTableState,'valor','Valor','renderLancTable')}
+    <th>Histórico / Complemento</th><th>Status</th><th>Incluir</th>
+  </tr></thead><tbody>`;
+  indexed.forEach(({row:r, idx:i})=>{
+    html += `<tr class="${r.flag?'flag':''}${r.incluir===false?' excluded':''}">
+      <td class="cell"><input class="cell-input" value="${r.data?fmtDateBR(r.data):''}" onchange="updateLancRow(${i},'data',this.value)"></td>
+      <td class="cell"><input class="cell-input" style="width:60px" value="${r.debito??''}" onchange="updateLancRow(${i},'debito',this.value)"></td>
+      <td class="cell"><input class="cell-input" style="width:60px" value="${r.credito??''}" onchange="updateLancRow(${i},'credito',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.valor)}" onchange="updateLancRow(${i},'valor',this.value)"></td>
+      <td class="cell"><input class="cell-input wide" value="${r.hist||r.complemento||''}" onchange="updateLancRow(${i},'complemento',this.value)"></td>
+      <td>${r.statusText||''}</td>
+      <td style="text-align:center"><input type="checkbox" ${r.incluir===false?'':'checked'} onchange="toggleLancRow(${i},this.checked)"></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+  <div class="btn-row">
+    <button class="btn" onclick="downloadLancXlsx()">Baixar lancamentos.xlsx</button>
+    <button class="btn ghost" onclick="downloadLancTxt()">Baixar lanctos.txt</button>
+  </div>`;
+  box.innerHTML = html;
+}
+function updateLancRow(i, field, val){
+  const r = lancRowsState[i];
+  if(field==="data"){ const dt=brParts(val); if(dt) r.data=dt; }
+  else if(field==="valor"){ const n=parseBRL(val); if(n!=null) r.valor=n; }
+  else if(field==="debito" || field==="credito"){ r[field] = String(val).trim()===""?null:val.trim(); }
+  else if(field==="complemento"){ r.complemento = val; r.hist = null; }
+  if(r.debito!=null && r.credito!=null && r.data && (r.hist || r.complemento)) r.flag = false;
+}
+function toggleLancRow(i, checked){ lancRowsState[i].incluir = checked; }
+const LANC_HEADER = ["Data","Débito","Crédito","Valor","Cód. Hist.","Complemento Histórico","Inicia Lote","Código Emp.","Centro de Custo Débito","Centro de Custo Crédito"];
+function lancRowArray(r){
+  const codEmp = document.getElementById("codEmp").value.trim();
+  return [r.data?fmtDateBR(r.data):"", r.debito??"", r.credito??"", r.valor, "", r.hist||r.complemento||"", r.iniciaLote??"", codEmp, "", ""];
+}
+function downloadLancXlsx(){
+  const usaveis = lancRowsState.filter(r=>r.incluir!==false);
+  downloadXlsx("vidal_adv_lancamentos.xlsx", [LANC_HEADER, ...usaveis.map(lancRowArray)], "Lancamentos");
+}
+function downloadLancTxt(){
+  const usaveis = lancRowsState.filter(r=>r.incluir!==false);
+  const pendentes = usaveis.filter(r=>r.flag);
+  if(pendentes.length){
+    if(!confirm(`${pendentes.length} linha(s) ainda marcada(s) pra conferir (conta em branco ou sem data). Gerar mesmo assim?`)) return;
+  }
+  const lines = usaveis.map(r=> lancRowArray(r).map((v,i)=> i===3 ? fmtValorTxt(v) : (i===5 ? stripAccents(v) : v)).join(";"));
+  downloadTextAnsi("vidal_adv_lanctos.txt", lines.join("\r\n") + "\r\n");
+}
+
+document.getElementById("bankContaLabel").textContent = BANK_CONTA;
+document.querySelectorAll(".bankContaInline").forEach(el=>el.textContent = BANK_CONTA);
+document.getElementById("prolaboreValor").value = fmtBRL(prolaboreValor);
+renderPadroesTable();
+renderIgnorarTable();
+
+/* =========================================================================
+   BAIXA DE SERVIÇOS — recebimentos de clientes (extrato × Contas a Receber)
+   ========================================================================= */
+function onlyDigits2(s){ return (s||"").toString().replace(/\D/g,""); }
+function mod11Digit(nums, weights){
+  let total = 0;
+  for(let i=0;i<nums.length;i++) total += nums[i]*weights[i];
+  const r = total % 11;
+  return r<2 ? 0 : 11-r;
+}
+function isValidCPF(digits){
+  const d = onlyDigits2(digits);
+  if(d.length!==11 || /^(\d)\1{10}$/.test(d)) return false;
+  const nums = d.split("").map(Number);
+  const dv1 = mod11Digit(nums.slice(0,9), [10,9,8,7,6,5,4,3,2]);
+  const dv2 = mod11Digit(nums.slice(0,9).concat([dv1]), [11,10,9,8,7,6,5,4,3,2]);
+  return nums[9]===dv1 && nums[10]===dv2;
+}
+function isValidCNPJ(digits){
+  const d = onlyDigits2(digits);
+  if(d.length!==14 || /^(\d)\1{13}$/.test(d)) return false;
+  const nums = d.split("").map(Number);
+  const w1 = [5,4,3,2,9,8,7,6,5,4,3,2];
+  const w2 = [6,5,4,3,2,9,8,7,6,5,4,3,2];
+  const dv1 = mod11Digit(nums.slice(0,12), w1);
+  const dv2 = mod11Digit(nums.slice(0,12).concat([dv1]), w2);
+  return nums[12]===dv1 && nums[13]===dv2;
+}
+function classifyDocumento(digits){
+  const d = onlyDigits2(digits);
+  if(d.length===14) return {tipo:"CNPJ", valido:isValidCNPJ(d)};
+  if(d.length===11) return {tipo:"CPF", valido:isValidCPF(d)};
+  return {tipo:null, valido:false};
+}
+
+/* ---- Contas a Receber por Cliente (PDF do Domínio) — layout Vidal Adv:
+   Documento/Emissão/Saída/Vencimento/V.Parcela/V.Recebido/Juros/Multa/Outras/
+   Desconto/Devolução/Saldo/Situação ---- */
+const EMPRESA_RE = /^Empresa:\s*(.+?)\s*$/i;
+const CNPJ_HEADER_RE = /CNPJ:\s*([\d.\/-]{14,18})/;
+const GROUP_RE = /^Cliente:\s*(\d+)\s*-\s*(.+)$/;
+const TITULO_RE = /^(\S+)\s+(\d{2}\/\d{2}\/\d{4})\s+(\d{2}\/\d{2}\/\d{4})\s+(\d{2}\/\d{2}\/\d{4})\s+([\d.,]+)\s+([\d.,]+)\s+[\d.,]+\s+[\d.,]+\s+[\d.,]+\s+[\d.,]+\s+[\d.,]+\s+[\d.,]+\s*(Aberta|Parcial|Baixada|Recebida|Paga)$/;
+async function parseContasReceberPdf(file){
+  const pages = await extractPdfAllLines(file);
+  const allLines = pages.flat();
+  let empresaNome = null, empresaCnpj = null;
+  const em = allLines.find(l=>/^Empresa:/i.test(l));
+  if(em) empresaNome = em.replace(/^Empresa:\s*/i,"").trim();
+  const cm = allLines.join("\n").match(CNPJ_HEADER_RE);
+  if(cm) empresaCnpj = onlyDigits2(cm[1]);
+  const titulos = [];
+  let codigo = null, nomeParceiro = null;
+  allLines.forEach(line=>{
+    const gm = line.match(GROUP_RE);
+    if(gm){ codigo = gm[1]; nomeParceiro = gm[2].trim(); return; }
+    if(/^Sub Total/i.test(line) || /^Total Geral/i.test(line) || /^Documento/i.test(line)) return;
+    const tm = line.match(TITULO_RE);
+    if(tm && codigo!=null){
+      titulos.push({ codigo, nome: nomeParceiro, documento: tm[1], emissao: brParts(tm[2]), vencimento: brParts(tm[4]), valorParcela: parseBRL(tm[5]), valorRecebido: parseBRL(tm[6]), situacao: tm[7] });
+    }
+  });
+  return {empresaNome, empresaCnpj, titulos};
+}
+
+/* ---- Motor de casamento por dígito-a-dígito exato (mais de um título somado no mesmo Pix) ---- */
+function dpSubsetExact(pool, targetCents){
+  const n = pool.length;
+  const vals = pool.map(p=>p._cents);
+  const order = [...Array(n).keys()].sort((a,b)=>vals[b]-vals[a]);
+  let result = null;
+  function rec(i, remaining, chosen){
+    if(result) return;
+    if(remaining===0){ result = chosen.slice(); return; }
+    if(i>=n || remaining<0) return;
+    let rest = 0;
+    for(let j=i;j<n;j++) rest += vals[order[j]];
+    if(rest < remaining) return;
+    const idx = order[i];
+    chosen.push(idx);
+    rec(i+1, remaining-vals[idx], chosen);
+    chosen.pop();
+    if(result) return;
+    rec(i+1, remaining, chosen);
+  }
+  rec(0, targetCents, []);
+  return result ? result.map(i=>pool[i]) : null;
+}
+
+// O favorecido do Pix no extrato Inter costuma vir como 'Cp :00000000-NOME' — tira
+// esse prefixo de código antes de comparar com o nome do título.
+function extractPayerName(favorecido){
+  const m = (favorecido||"").trim().match(/^Cp\s*:?\s*\d*-(.+)$/i);
+  return (m ? m[1] : (favorecido||"")).trim();
+}
+function scoreNomeMatch(extratoNomeRaw, tituloNomeRaw){
+  const a = normalizeText(extractPayerName(extratoNomeRaw));
+  const b = normalizeText(tituloNomeRaw);
+  if(!a || !b) return 0;
+  if(a === b) return 3;
+  if(b.startsWith(a) || a.startsWith(b)) return 2;
+  const aWords = a.split(/\s+/).filter(Boolean);
+  const bWords = b.split(/\s+/).filter(Boolean);
+  if(aWords.length){
+    const last = aWords[aWords.length-1];
+    if(last.length>=3 && bWords.some(w=> w===last || w.startsWith(last) || last.startsWith(w))) return 1;
+  }
+  return 0;
+}
+const METODO_LABEL = {3:"nome exato", 2:"nome (prefixo/truncado)", 1:"sobrenome"};
+
+/* ---- Motor principal: nome > sobrenome > valor ---- */
+function matchBaixaServicos(linhasExtrato, titulosAbertosIn){
+  const titulos = titulosAbertosIn.map(t=>({...t, _used:false}));
+  const linhasCandidatas = linhasExtrato.filter(l=> l.valor>0 && isRecebimentoCliente(l.tipo));
+  const resultados = [];
+  linhasCandidatas.forEach(l=>{
+    const nomeExtrato = extractPayerName(l.favorecido);
+    const targetCents = Math.round(l.valor*100);
+    let candidatos = titulos.filter(t=>!t._used).map(t=>({t, score:scoreNomeMatch(nomeExtrato, t.nome)})).filter(x=>x.score>0);
+    if(candidatos.length){
+      const maxScore = Math.max(...candidatos.map(c=>c.score));
+      const poolNome = candidatos.filter(c=>c.score===maxScore).map(c=>c.t);
+      if(poolNome.length===1 && Math.round(poolNome[0].valorParcela*100)===targetCents){
+        poolNome[0]._used = true;
+        resultados.push({linha:l, titulos:poolNome, metodo:METODO_LABEL[maxScore]});
+        return;
+      }
+      const todosDoNome = titulos.filter(t=>!t._used && scoreNomeMatch(nomeExtrato, t.nome)===maxScore);
+      if(todosDoNome.length>1){
+        const foundNome = dpSubsetExact(todosDoNome.map(t=>({...t,_cents:Math.round(t.valorParcela*100)})), targetCents);
+        if(foundNome && foundNome.length){
+          const matched = foundNome.map(fu=> todosDoNome.find(x=>x.documento===fu.documento));
+          matched.forEach(t=>t._used=true);
+          resultados.push({linha:l, titulos:matched, metodo:`${METODO_LABEL[maxScore]} — ${matched.length} nota(s)`});
+          return;
+        }
+      }
+    }
+    const porValor = titulos.filter(t=>!t._used && Math.round(t.valorParcela*100)===targetCents);
+    if(porValor.length===1){
+      porValor[0]._used = true;
+      resultados.push({linha:l, titulos:[porValor[0]], metodo:"valor"});
+      return;
+    }
+    resultados.push({linha:l, titulos:[], metodo:null});
+  });
+  return {resultados, naoUsados: titulos.filter(t=>!t._used)};
+}
+
+/* ---- Resolução de CNPJ — código (empresa+cliente+código) primeiro, depois nome aproximado ---- */
+function resolverCnpj(empresaCnpj, codigo, nomeRelatorio){
+  const chave = `${empresaCnpj}_cliente_${codigo}`;
+  const doc = codigoIndex[chave];
+  if(doc && clientesDB[doc]) return {documento: doc, nome: clientesDB[doc].razao_social};
+  return findBestMatchCliente(nomeRelatorio);
+}
+let codigoIndex = {};
+function rebuildCodigoIndex(){
+  codigoIndex = {};
+  Object.keys(clientesDB).forEach(doc=>{
+    const codigos = clientesDB[doc].codigos || {};
+    Object.keys(codigos).forEach(k=>{ codigoIndex[`${k}_${codigos[k]}`] = doc; });
+  });
+}
+function findBestMatchCliente(nome){
+  const norm = normalizeText(nome);
+  const words = norm.split(/\s+/).filter(w=>w.length>2);
+  let best=null, bestScore=0, bestKey=null;
+  Object.keys(clientesDB).forEach(key=>{
+    const c = clientesDB[key];
+    const cn = normalizeText(c.razao_social);
+    let score = 0;
+    if(cn.includes(norm) || norm.includes(cn)) score += 10;
+    words.forEach(w=>{ if(cn.includes(w)) score += 1; });
+    if(score>bestScore){ bestScore=score; best=c; bestKey=key; }
+  });
+  return bestScore>0 ? {documento:bestKey, nome:best.razao_social} : null;
+}
+function loadClientes(){ const raw = localStorage.getItem("cibele_clientes_fornecedores"); return raw ? JSON.parse(raw) : {}; }
+function saveClientes(dbo){ localStorage.setItem("cibele_clientes_fornecedores", JSON.stringify(dbo)); }
+// "var" (não "let") de propósito: o módulo Firebase abaixo sincroniza fazendo
+// "window.clientesDB = ...", e um "let" nesse escopo global NUNCA vira
+// propriedade de window — o cadastro pareceria nunca atualizar (bug já visto
+// em outras ferramentas do Hub). "var" no escopo global É window.clientesDB.
+var clientesDB = loadClientes();
+rebuildCodigoIndex();
+
+let contasReceberState = null, extratoServicosState = null;
+wireDropzone("contasReceberDrop","contasReceberFile", async (f, drop)=>{
+  const status = document.getElementById("servicosStatus");
+  status.classList.remove("hidden","err"); status.textContent = "Lendo PDF...";
+  try{
+    const parsed = await parseContasReceberPdf(f);
+    if(!parsed.empresaCnpj) throw new Error('Não achei "CNPJ:" no cabeçalho deste relatório — confere se é o PDF certo.');
+    if(!parsed.titulos.length) throw new Error("Não encontrei nenhum título neste relatório.");
+    contasReceberState = parsed;
+    markDropDone(drop, `${parsed.empresaNome} (${parsed.titulos.length} títulos)`);
+    status.classList.add("hidden");
+  }catch(err){
+    status.classList.remove("hidden"); status.classList.add("err"); status.textContent = "Erro: " + err.message;
+    contasReceberState = null;
+  }
+  document.getElementById("processServicosBtn").disabled = !(contasReceberState && extratoServicosState);
+});
+wireDropzone("extratoServicosDrop","extratoServicosFile", async (f, drop)=>{
+  const status = document.getElementById("servicosStatus");
+  status.classList.remove("hidden","err"); status.textContent = "Lendo PDF...";
+  try{
+    extratoServicosState = await parseExtratoVidal(f);
+    if(!extratoServicosState.length) throw new Error("Não encontrei nenhum lançamento nesse extrato.");
+    markDropDone(drop, `${f.name} (${extratoServicosState.length} lançamentos)`);
+    status.classList.add("hidden");
+  }catch(err){
+    status.classList.remove("hidden"); status.classList.add("err"); status.textContent = "Erro: " + err.message;
+    extratoServicosState = null;
+  }
+  document.getElementById("processServicosBtn").disabled = !(contasReceberState && extratoServicosState);
+});
+
+let servicosRowsState = [];
+function processarBaixaServicos(){
+  const abertos = contasReceberState.titulos.filter(t=> normalizeText(t.situacao).startsWith("ABERT"));
+  const {resultados, naoUsados} = matchBaixaServicos(extratoServicosState, abertos);
+  const rows = [];
+  resultados.forEach(r=>{
+    if(!r.titulos.length){
+      rows.push({pendenteSemTitulo:true, data:r.linha.data, valor:r.linha.valor, historico:r.linha.tipo, nomeFrag:r.linha.favorecido, statusClass:"err", statusText:"Sem título correspondente em aberto — confira/preencha à mão"});
+      return;
+    }
+    r.titulos.forEach(t=>{
+      const cnpjInfo = resolverCnpj(contasReceberState.empresaCnpj, t.codigo, t.nome);
+      rows.push({
+        numero: t.documento, cnpj: cnpjInfo?cnpjInfo.documento:"", nome: cnpjInfo?cnpjInfo.nome:t.nome,
+        vencimento: t.vencimento, databaixa: r.linha.data, valor: t.valorParcela,
+        juros:0, multa:0, desconto:0, pis:0, cofins:0, csll:0, irrf:0,
+        statusClass: cnpjInfo ? null : "err",
+        statusText: cnpjInfo ? r.metodo : "CNPJ não encontrado no cadastro — importe o relatório de Clientes abaixo",
+      });
+    });
+  });
+  naoUsados.sort((a,b)=>partsToDate(a.vencimento)-partsToDate(b.vencimento)).forEach(t=>{
+    rows.push({numero:t.documento, cnpj:"", nome:t.nome, vencimento:t.vencimento, databaixa:null, valor:t.valorParcela, juros:0,multa:0,desconto:0,pis:0,cofins:0,csll:0,irrf:0, statusClass:"err", statusText:"Título em aberto sem correspondência no extrato", naoExportar:true});
+  });
+  servicosRowsState = rows;
+  renderServicosResult(rows, contasReceberState.empresaNome, contasReceberState.empresaCnpj);
+}
+function renderServicosResult(rows, empresaNome, empresaCnpj){
+  const box = document.getElementById("resultServicosCard");
+  box.classList.remove("hidden");
+  const nOk = rows.filter(r=>!r.statusClass).length;
+  const nErr = rows.filter(r=>r.statusClass==="err").length;
+  let html = `<div class="section-title">${empresaNome} — baixa_ser.txt</div>
+  <div class="summary-row">
+    <div class="item"><div class="k">Linhas</div><div class="v">${rows.length}</div></div>
+    <div class="item"><div class="k">OK</div><div class="v">${nOk}</div></div>
+    <div class="item"><div class="k">Pendente</div><div class="v">${nErr}</div></div>
+  </div>
+  <div class="help">Vermelho = falta CNPJ, título sem correspondência, ou recebimento sem título casado. Linhas esmaecidas (título aberto sem recebimento no mês) nunca entram no arquivo exportado. Campos editáveis.</div>
+  <div class="table-wrap"><table class="preview"><thead><tr>
+    <th>Nº Nota</th><th>CNPJ/CPF</th><th>Nome</th><th>Vencimento</th><th>Data Baixa</th><th>Valor Recebido</th><th>Juros</th><th>Multa</th><th>Desconto</th><th>PIS</th><th>COFINS</th><th>CSLL</th><th>IRRF</th><th>Status</th>
+  </tr></thead><tbody>`;
+  rows.forEach((r,i)=>{
+    if(r.pendenteSemTitulo){
+      html += `<tr class="err"><td colspan="13" style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">${fmtDateBR(r.data)} — ${fmtBRL(r.valor)} — ${r.historico}${r.nomeFrag?(" "+r.nomeFrag):""}</td><td>${r.statusText}</td></tr>`;
+      return;
+    }
+    const trCls = (r.statusClass || "") + (r.naoExportar ? " excluded" : "");
+    html += `<tr class="${trCls}">
+      <td class="cell"><input class="cell-input" value="${r.numero}" onchange="updateServicoRow(${i},'numero',this.value)"></td>
+      <td class="cell"><input class="cell-input wide" value="${r.cnpj}" onchange="updateServicoRow(${i},'cnpj',this.value)"></td>
+      <td>${r.nome||""}</td>
+      <td class="cell"><input class="cell-input" value="${fmtDateBR(r.vencimento)}" onchange="updateServicoRow(${i},'vencimento',this.value)"></td>
+      <td class="cell"><input class="cell-input" value="${r.databaixa?fmtDateBR(r.databaixa):''}" onchange="updateServicoRow(${i},'databaixa',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.valor)}" onchange="updateServicoRow(${i},'valor',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.juros)}" onchange="updateServicoRow(${i},'juros',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.multa)}" onchange="updateServicoRow(${i},'multa',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.desconto)}" onchange="updateServicoRow(${i},'desconto',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.pis)}" onchange="updateServicoRow(${i},'pis',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.cofins)}" onchange="updateServicoRow(${i},'cofins',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.csll)}" onchange="updateServicoRow(${i},'csll',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.irrf)}" onchange="updateServicoRow(${i},'irrf',this.value)"></td>
+      <td>${r.statusText||""}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+  <div class="btn-row">
+    <button class="btn" onclick="downloadServicosXlsx()">Baixar baixa_servicos.xlsx</button>
+    <button class="btn ghost" onclick="downloadServicosTxt()">Baixar baixa_ser.txt</button>
+  </div>`;
+  box.innerHTML = html;
+  const semCnpj = rows.filter(r=>!r.pendenteSemTitulo && !r.cnpj);
+  document.getElementById("cnpjHelperCard").classList.toggle("hidden", semCnpj.length===0);
+  document.getElementById("cnpjHelperEmpresa").textContent = `da Vidal Adv (CNPJ ${empresaCnpj})`;
+  cnpjHelperEmpresaCnpj = empresaCnpj;
+}
+function updateServicoRow(i, field, val){
+  const r = servicosRowsState[i];
+  if(field==="vencimento" || field==="databaixa"){ const dt=brParts(val); r[field]=dt||null; }
+  else if(["valor","juros","multa","desconto","pis","cofins","csll","irrf"].includes(field)){ const n=parseBRL(val); if(n!=null) r[field]=n; }
+  else { r[field]=val; }
+  if(field==="cnpj"){
+    const cl = classifyDocumento(val);
+    r.statusClass = cl.valido ? null : "err";
+    r.statusText = cl.valido ? (r.statusText||"OK") : "CNPJ/CPF inválido";
+  }
+}
+function servicoRowArray(r){
+  return [r.numero, onlyDigits2(r.cnpj), fmtDateBR(r.vencimento), r.databaixa?fmtDateBR(r.databaixa):"", r.valor, r.juros, r.multa, r.desconto, r.pis, r.cofins, r.csll, r.irrf];
+}
+function downloadServicosXlsx(){
+  const header = ["Número da Nota","CPF/CNPJ do Cliente","Data de Vencimento da Parcela","Data da Baixa da Parcela","Valor Recebido","Valor Juros","Valor Multa","Valor Desconto","Valor PIS","Valor COFINS","Valor CSLL","Valor IRRF"];
+  const usaveis = servicosRowsState.filter(r=>!r.pendenteSemTitulo && !r.naoExportar);
+  downloadXlsx("baixa_servicos.xlsx", [header, ...usaveis.map(servicoRowArray)], "Baixa");
+}
+function downloadServicosTxt(){
+  const usaveis = servicosRowsState.filter(r=>!r.pendenteSemTitulo && !r.naoExportar);
+  const naoValidas = usaveis.filter(r=>{ const c=classifyDocumento(r.cnpj); return !c.valido; });
+  if(naoValidas.length){
+    if(!confirm(`${naoValidas.length} linha(s) ainda têm CNPJ/CPF ausente ou inválido. Gerar mesmo assim (essas linhas provavelmente serão rejeitadas pelo Domínio)?`)) return;
+  }
+  const lines = usaveis.map(r=> servicoRowArray(r).map((v,i)=> i>=4 ? fmtValorTxt(v) : v).join(";"));
+  downloadTextAnsi("baixa_ser.txt", lines.join("\r\n") + "\r\n");
+}
+
+/* ---- Cadastro de Clientes (PDF) — fallback pra resolver CNPJ que faltou ---- */
+const BR_UFS = {"ACRE":"AC","ALAGOAS":"AL","AMAPA":"AP","AMAZONAS":"AM","BAHIA":"BA","CEARA":"CE","DISTRITO FEDERAL":"DF","ESPIRITO SANTO":"ES","GOIAS":"GO","MARANHAO":"MA","MATO GROSSO DO SUL":"MS","MATO GROSSO":"MT","MINAS GERAIS":"MG","PARAIBA":"PB","PARANA":"PR","PERNAMBUCO":"PE","PIAUI":"PI","RIO DE JANEIRO":"RJ","RIO GRANDE DO NORTE":"RN","RIO GRANDE DO SUL":"RS","RONDONIA":"RO","RORAIMA":"RR","SANTA CATARINA":"SC","SAO PAULO":"SP","SERGIPE":"SE","TOCANTINS":"TO","PARA":"PA"};
+const BR_UF_NAMES = Object.keys(BR_UFS).sort((a,b)=>b.length-a.length);
+function splitCidadeUfPais(tail){
+  let t = normalizeText(tail).replace(/\bBRASIL\b\s*$/,"").trim();
+  t = t.replace(/^\d{4,12}\s+/,"");
+  for(const name of BR_UF_NAMES){
+    const re = new RegExp("\\s+"+name+"$");
+    if(re.test(t)) return {municipio: t.replace(re,"").trim(), uf: BR_UFS[name]};
+  }
+  return {municipio: t.trim(), uf: ""};
+}
+function parseClientesPdf(allLines){
+  const out = [];
+  const headerRe = /^\s*(\d{1,6})\s+(.+?)\s+(CNPJ|CPF|Outros)\s+([\d.\/-]*)/;
+  const cityRe = /^(.+?)\s+([A-Z]{2})\s+(\d{5}-\d{3}|-)(?=\s|$)/;
+  for(let i=0;i<allLines.length;i++){
+    const hm = allLines[i].match(headerRe);
+    if(!hm) continue;
+    const [, codigo, nomeRaw, tipo, docRaw] = hm;
+    const doc = onlyDigits2(docRaw);
+    if(!doc) continue;
+    let municipio="", uf="";
+    for(let j=i+1;j<=i+2 && j<allLines.length;j++){
+      const cm = allLines[j].match(cityRe);
+      if(cm){ municipio=cm[1].trim(); uf=cm[2]; break; }
+    }
+    let razao = nomeRaw.replace(new RegExp("^"+codigo+"\\s*"),"").trim();
+    out.push({codigo, documento:doc, tipo: doc.length===14?"CNPJ":"CPF", razao_social: razao, municipio, uf});
+  }
+  return out;
+}
+let cnpjHelperEmpresaCnpj = null;
+wireDropzone("cadPdfDrop","cadPdfFile", async (f)=>{
+  const status = document.getElementById("cadPdfStatus");
+  status.classList.remove("hidden","err","ok"); status.textContent = "Lendo PDF...";
+  try{
+    const pages = await extractPdfAllLines(f);
+    const allLines = pages.flat();
+    const parsed = parseClientesPdf(allLines);
+    if(!parsed.length) throw new Error("Não consegui reconhecer nenhum registro nesse PDF.");
+    let addedCli=0, updatedCod=0;
+    const dirty = {};
+    parsed.forEach(p=>{
+      if(!p.documento) return;
+      if(!clientesDB[p.documento]){
+        clientesDB[p.documento] = {documento:p.documento, tipo:p.tipo, razao_social:p.razao_social, municipio:p.municipio, uf:p.uf, codigos:{}, fonte:"importado-pdf-vidal-adv"};
+        addedCli++;
+      }
+      if(!clientesDB[p.documento].codigos) clientesDB[p.documento].codigos = {};
+      if(p.codigo && cnpjHelperEmpresaCnpj){
+        const chave = `${cnpjHelperEmpresaCnpj}_cliente`;
+        if(clientesDB[p.documento].codigos[chave] !== p.codigo){
+          clientesDB[p.documento].codigos[chave] = p.codigo;
+          updatedCod++;
+        }
+      }
+      dirty[p.documento] = clientesDB[p.documento];
+    });
+    saveClientes(clientesDB);
+    rebuildCodigoIndex();
+    if(window.vidalCloud) window.vidalCloud.pushManyClientes(dirty);
+    status.classList.add("ok");
+    status.textContent = `Cadastro atualizado: ${addedCli} cliente(s) novo(s), ${updatedCod} código(s) vinculado(s). Reprocessando...`;
+    if(servicosRowsState.length) processarBaixaServicos();
+  }catch(err){
+    status.classList.add("err"); status.textContent = "Erro: " + err.message;
+  }
+});
+
+/* =========================================================================
+   APLICAÇÕES (RENDA FIXA) — cada Nota tem sua própria conta no Ativo
+   ========================================================================= */
+const NOTAS_SEED = [
+  ["127622197",24],["138161704",26],["138634983",27],["138865497",28],["148971923",29],
+  ["159373664",33],["163930147",34],["169476974",439],["170551422",437],["171488805",438],
+  ["181925174",440],["186987894",441],["194766475",443],["206662145",444],["213699840",445],
+  ["220593732",446],["224932541",447],["233129096",448],["235987588",449],["242236474",450],
+  ["242579849",451],["255136737",452],["267773198",453],["330757416",455],["333857589",456],
+  ["339329997",457],["383791060",460],["385126381",461],["388401070",462],["390471587",463],
+  ["409699071",464],["429850462",465],["432579794",466],["469465200",468],["469610612",469],
+  ["473770139",470],["498586490",474],["502648630",473],["512408962",475],["513865487",476],
+  ["514623717",477],["542695374",478],["572310382",479],["573239201",480],["575628752",481],
+  ["581956632",482],["597828984",483],["642009506",484],
+];
+function loadNotas(){
+  const raw = localStorage.getItem("vidal_notas_conta");
+  const salvo = raw ? JSON.parse(raw) : [];
+  const chaves = new Set(salvo.map(n=>n.nota));
+  const novos = NOTAS_SEED.filter(([nota])=>!chaves.has(nota)).map(([nota,conta])=>({nota, conta}));
+  const combinado = [...salvo, ...novos];
+  if(novos.length) saveNotas(combinado);
+  return combinado;
+}
+function saveNotas(list){ localStorage.setItem("vidal_notas_conta", JSON.stringify(list)); }
+let notasDB = loadNotas();
+function renderNotasTable(){
+  const tbl = document.getElementById("notasTable");
+  tbl.innerHTML = `<thead><tr><th>Nota (nº da aplicação)</th><th>Conta</th><th></th></tr></thead><tbody>` +
+    notasDB.map((n,i)=>`<tr>
+      <td class="cell"><input class="cell-input wide" value="${n.nota}" onchange="updateNota(${i},'nota',this.value)"></td>
+      <td class="cell"><input class="cell-input" style="width:80px" value="${n.conta??''}" onchange="updateNota(${i},'conta',this.value)"></td>
+      <td><button class="btn small ghost" onclick="removeNotaRow(${i})">✕</button></td>
+    </tr>`).join("") + `</tbody>`;
+}
+function updateNota(i, field, val){
+  if(field==="conta"){ notasDB[i][field] = String(val).trim()===""?null:Number(val); }
+  else { notasDB[i][field] = val.trim(); }
+  saveNotas(notasDB);
+}
+function addNotaRow(){ notasDB.push({nota:"", conta:null}); saveNotas(notasDB); renderNotasTable(); }
+function removeNotaRow(i){ notasDB.splice(i,1); saveNotas(notasDB); renderNotasTable(); }
+renderNotasTable();
+
+/* ---- Parser: Extrato de Movimentação de Renda Fixa ---- */
+const MOV_HEADER_RE = /^Vencimento:\s*(\d{2}\/\d{2}\/\d{4})\s+Data aplica..o:\s*(\d{2}\/\d{2}\/\d{4})\s+Valor:\s*R\$\s?([\d.,]+)\s+Taxa/i;
+const MOV_LINHA_RE = /^(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+R\$\s?([\d.,]+)\s+(ABERTURA|MOVIMENTA..O|DEFINITIVO)\s+R\$\s?([\d.,]+)$/i;
+async function parseMovimentacao(file){
+  const pages = await extractPdfAllLines(file);
+  const allLines = pages.flat();
+  const blocos = [];
+  let atual = null;
+  allLines.forEach(line=>{
+    const hm = line.match(MOV_HEADER_RE);
+    if(hm){
+      atual = {vencimento:brParts(hm[1]), dataAplicacao:brParts(hm[2]), valorAplicacao:parseBRL(hm[3]), rendimentoTotal:0, rendimentos:[]};
+      blocos.push(atual);
+      return;
+    }
+    if(!atual) return;
+    const tm = line.match(MOV_LINHA_RE);
+    if(!tm) return;
+    const [, dataStr, historico, valorStr] = tm;
+    if(normalizeText(historico).startsWith("RENDIMENTO ATE ESTA DATA")){
+      const valor = parseBRL(valorStr);
+      atual.rendimentos.push({data:brParts(dataStr), valor});
+      atual.rendimentoTotal = Math.round((atual.rendimentoTotal+valor)*100)/100;
+    }
+  });
+  return blocos;
+}
+/* ---- Parser: Extrato de Posição de Renda Fixa (traz o nº da Nota de cada CDB aberto) ---- */
+const POS_PERIODO_RE = /Posi..o em:\s*(\d{2}\/\d{2}\/\d{4})/i;
+const POS_LINHA_RE = /^(\d{5,})\s+(\d{2}\/\d{2}\/\d{4})\s+(\d{2}\/\d{2}\/\d{4})\s+R\$\s?([\d.,]+)\s+CDB/i;
+async function parsePosicao(file){
+  const pages = await extractPdfAllLines(file);
+  const allLines = pages.flat();
+  const fullText = allLines.join(" ");
+  let periodo = null;
+  const pm = fullText.match(POS_PERIODO_RE);
+  if(pm) periodo = brParts(pm[1]);
+  const notas = [];
+  allLines.forEach(line=>{
+    const m = line.match(POS_LINHA_RE);
+    if(m) notas.push({nota:m[1], dataInicio:brParts(m[2]), dataVencimento:brParts(m[3]), valorAplicacao:parseBRL(m[4])});
+  });
+  return {periodo, notas};
+}
+function datasIguais(a,b){ return a && b && a.y===b.y && a.m===b.m && a.d===b.d; }
+function contaDaNota(nota){
+  const reg = notasDB.find(n=>n.nota===nota);
+  return reg ? reg.conta : null;
+}
+function buildAplicEntries(blocos, notasList, periodo){
+  const rows = [];
+  const dataLancamento = {y:periodo.y, m:periodo.m, d: ultimoDiaMes(periodo.y, periodo.m)};
+  const mesAno = `${String(periodo.m).padStart(2,"0")}/${periodo.y}`;
+  blocos.forEach(b=>{
+    if(b.rendimentoTotal<=0) return;
+    const notaInfo = notasList.find(n=> datasIguais(n.dataInicio,b.dataAplicacao) && datasIguais(n.dataVencimento,b.vencimento) && Math.round(n.valorAplicacao*100)===Math.round(b.valorAplicacao*100));
+    if(!notaInfo){
+      // CDB sem correspondência na Posição = encerrado no período — ignorado por completo (decisão do usuário).
+      rows.push({ignorado:true, data:b.dataAplicacao, vencimento:b.vencimento, valor:b.rendimentoTotal, statusText:`CDB aplicado em ${fmtDateBR(b.dataAplicacao)} (venc. ${fmtDateBR(b.vencimento)}) encerrado no período — sem Nota na Posição, ignorado`});
+      return;
+    }
+    const conta = contaDaNota(notaInfo.nota);
+    rows.push({
+      data: dataLancamento, debito: conta, credito: 395, valor: b.rendimentoTotal,
+      hist: `VALOR REF. RENDIMENTO DE APLICACAO No ${notaInfo.nota} ${mesAno}`,
+      nota: notaInfo.nota, iniciaLote:1,
+      flag: conta==null,
+      statusText: conta==null ? `Nota ${notaInfo.nota} sem conta cadastrada — crie a conta no plano de contas e cadastre abaixo` : "OK",
+    });
+    if(conta==null && !notasDB.some(n=>n.nota===notaInfo.nota)){
+      notasDB.push({nota:notaInfo.nota, conta:null});
+      saveNotas(notasDB);
+    }
+  });
+  return rows;
+}
+
+let aplicRowsState = [];
+function setAplicStatus(msg, cls){
+  const el = document.getElementById("aplicUploadStatus");
+  el.textContent = msg; el.className = "status-line" + (cls?(" "+cls):"");
+  el.classList.remove("hidden");
+}
+async function processarAplicacoes(){
+  const movFile = document.getElementById("movFile").files[0];
+  const posFile = document.getElementById("posFile").files[0];
+  if(!movFile || !posFile){ setAplicStatus("Carregue os dois relatórios antes de processar.", "err"); return; }
+  setAplicStatus("Processando...");
+  try{
+    const blocos = await parseMovimentacao(movFile);
+    const {periodo, notas} = await parsePosicao(posFile);
+    if(!periodo) throw new Error('Não achei "Posição em:" no relatório de Posição — confere se é o PDF certo.');
+    if(!blocos.length) throw new Error("Não encontrei nenhum CDB no relatório de Movimentação.");
+    const rows = buildAplicEntries(blocos, notas, periodo);
+    aplicRowsState = rows;
+    renderNotasTable();
+    renderAplicResult();
+    setAplicStatus(`${rows.filter(r=>!r.ignorado).length} lançamento(s) gerado(s).`, "ok");
+  }catch(err){
+    setAplicStatus("Erro: " + err.message, "err");
+  }
+}
+function renderAplicResult(){
+  const box = document.getElementById("resultAplicCard");
+  box.classList.remove("hidden");
+  const usaveis = aplicRowsState.filter(r=>!r.ignorado);
+  const nFlag = usaveis.filter(r=>r.flag).length;
+  const nIgnorados = aplicRowsState.filter(r=>r.ignorado).length;
+  let html = `<div class="section-title">Rendimentos gerados</div>
+  <div class="summary-row">
+    <div class="item"><div class="k">Linhas</div><div class="v">${usaveis.length}</div></div>
+    <div class="item"><div class="k">Pra conferir</div><div class="v">${nFlag}</div></div>
+    <div class="item"><div class="k">Encerrados no período (ignorados)</div><div class="v">${nIgnorados}</div></div>
+  </div>
+  <div class="table-wrap"><table class="preview"><thead><tr>
+    <th>Data</th><th>Nota</th><th>Débito</th><th>Crédito</th><th>Valor</th><th>Histórico</th><th>Status</th><th>Incluir</th>
+  </tr></thead><tbody>`;
+  aplicRowsState.forEach((r,i)=>{
+    if(r.ignorado){
+      html += `<tr class="excluded"><td colspan="6" style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">${r.statusText}</td><td></td><td></td></tr>`;
+      return;
+    }
+    html += `<tr class="${r.flag?'flag':''}${r.incluir===false?' excluded':''}">
+      <td class="cell"><input class="cell-input" value="${fmtDateBR(r.data)}" onchange="updateAplicRow(${i},'data',this.value)"></td>
+      <td>${r.nota}</td>
+      <td class="cell"><input class="cell-input" style="width:60px" value="${r.debito??''}" onchange="updateAplicRow(${i},'debito',this.value)"></td>
+      <td class="cell"><input class="cell-input" style="width:60px" value="${r.credito??''}" onchange="updateAplicRow(${i},'credito',this.value)"></td>
+      <td class="cell"><input class="cell-input num" value="${fmtBRL(r.valor)}" onchange="updateAplicRow(${i},'valor',this.value)"></td>
+      <td class="cell"><input class="cell-input wide" value="${r.hist||''}" onchange="updateAplicRow(${i},'hist',this.value)"></td>
+      <td>${r.statusText||''}</td>
+      <td style="text-align:center"><input type="checkbox" ${r.incluir===false?'':'checked'} onchange="toggleAplicRow(${i},this.checked)"></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+  <div class="btn-row">
+    <button class="btn" onclick="downloadAplicXlsx()">Baixar aplicacoes.xlsx</button>
+    <button class="btn ghost" onclick="downloadAplicTxt()">Baixar aplicacoes_lanctos.txt</button>
+  </div>`;
+  box.innerHTML = html;
+}
+function updateAplicRow(i, field, val){
+  const r = aplicRowsState[i];
+  if(field==="data"){ const dt=brParts(val); if(dt) r.data=dt; }
+  else if(field==="valor"){ const n=parseBRL(val); if(n!=null) r.valor=n; }
+  else if(field==="debito" || field==="credito"){ r[field] = String(val).trim()===""?null:val.trim(); }
+  else { r[field]=val; }
+  if(r.debito!=null && r.credito!=null && r.data && r.hist) r.flag = false;
+}
+function toggleAplicRow(i, checked){ aplicRowsState[i].incluir = checked; }
+function aplicRowArray(r){
+  const codEmp = document.getElementById("codEmp").value.trim();
+  return [fmtDateBR(r.data), r.debito??"", r.credito??"", r.valor, "", r.hist||"", r.iniciaLote??"", codEmp, "", ""];
+}
+function downloadAplicXlsx(){
+  const usaveis = aplicRowsState.filter(r=>!r.ignorado && r.incluir!==false);
+  downloadXlsx("vidal_adv_aplicacoes.xlsx", [LANC_HEADER, ...usaveis.map(aplicRowArray)], "Aplicacoes");
+}
+function downloadAplicTxt(){
+  const usaveis = aplicRowsState.filter(r=>!r.ignorado && r.incluir!==false);
+  const pendentes = usaveis.filter(r=>r.flag);
+  if(pendentes.length){
+    if(!confirm(`${pendentes.length} linha(s) ainda marcada(s) pra conferir (nota sem conta cadastrada). Gerar mesmo assim?`)) return;
+  }
+  const lines = usaveis.map(r=> aplicRowArray(r).map((v,i)=> i===3 ? fmtValorTxt(v) : (i===5 ? stripAccents(v) : v)).join(";"));
+  downloadTextAnsi("vidal_adv_aplicacoes_lanctos.txt", lines.join("\r\n") + "\r\n");
+}
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+// Mesmo projeto Firebase e mesma collection "clientes" que a Conversões Cibele,
+// Baixas de Parcelas e Lançamentos Cia da Língua já usam — banco de CNPJ único
+// compartilhado entre as ferramentas do escritório.
+const firebaseConfig = {
+  apiKey: "AIzaSyCBIQkYYNt3K4gZ0OGqoqsU8Jnrsgxif5k",
+  authDomain: "conversoes-cibele.firebaseapp.com",
+  projectId: "conversoes-cibele",
+  storageBucket: "conversoes-cibele.firebasestorage.app",
+  messagingSenderId: "401784315449",
+  appId: "1:401784315449:web:5d459a524059c0978bb7e8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+let ready = false, firstSnap = true;
+
+function setCloudBadge(text, cls){
+  const el = document.getElementById("cloudStatus");
+  if(!el) return;
+  el.textContent = text; el.className = "badge " + (cls||"info");
+}
+setCloudBadge("Conectando à nuvem…", "warn");
+signInAnonymously(auth).catch(err=>{
+  console.error("Firebase auth error", err);
+  setCloudBadge("Nuvem indisponível — usando só este navegador", "err");
+});
+
+onAuthStateChanged(auth, (user)=>{
+  if(!user) return;
+  ready = true;
+  onSnapshot(collection(db, "clientes"), (snap)=>{
+    const cloudData = {};
+    snap.forEach(d=> cloudData[d.id] = d.data());
+    if(firstSnap){
+      firstSnap = false;
+      const localOnly = {};
+      Object.keys(window.clientesDB||{}).forEach(k=>{ if(!cloudData[k]) localOnly[k]=window.clientesDB[k]; });
+      window.clientesDB = {...cloudData, ...localOnly};
+      saveClientes(window.clientesDB);
+      if(Object.keys(localOnly).length) window.vidalCloud.pushManyClientes(localOnly);
+    } else {
+      window.clientesDB = cloudData;
+      saveClientes(window.clientesDB);
+    }
+    if(window.rebuildCodigoIndex) window.rebuildCodigoIndex();
+    setCloudBadge("Sincronizado com a nuvem", "ok");
+  }, err=>{ console.error("clientes onSnapshot", err); setCloudBadge("Erro de sincronização", "err"); });
+});
+
+window.vidalCloud = {
+  pushManyClientes(obj){
+    if(!ready) return;
+    const keys = Object.keys(obj||{}); if(!keys.length) return;
+    const batch = writeBatch(db);
+    keys.forEach(k=> batch.set(doc(db,"clientes",k), obj[k]));
+    batch.commit().catch(e=>console.error("pushManyClientes",e));
+  }
+};
+</script>
+</body>
+</html>
