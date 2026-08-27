@@ -245,6 +245,33 @@ code{background:var(--paper);padding:1px 5px;border-radius:3px;font-family:'IBM 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
+/* Navegação por teclado (padrão em todas as ferramentas): dentro de uma
+   tabela editável, seta cima/baixo e Enter movem o foco para o mesmo campo
+   (mesma coluna) na linha anterior/seguinte, como no Excel. Não interfere
+   em seta esquerda/direita (cursor de texto) nem fora de tabelas. */
+document.addEventListener("keydown", function(e){
+  if(e.key!=="ArrowUp" && e.key!=="ArrowDown" && e.key!=="Enter") return;
+  const alvo = e.target;
+  if(!alvo.matches || !alvo.matches("input, select, textarea")) return;
+  if(alvo.tagName==="TEXTAREA" && e.key==="Enter") return;
+  const celula = alvo.closest("td, th");
+  if(!celula) return;
+  const linha = celula.parentElement;
+  const indiceCelula = Array.prototype.indexOf.call(linha.children, celula);
+  const corpo = linha.parentElement;
+  const linhas = Array.prototype.filter.call(corpo.children, l => l.tagName==="TR");
+  const indiceLinha = linhas.indexOf(linha);
+  const linhaAlvo = e.key==="ArrowUp" ? linhas[indiceLinha-1] : linhas[indiceLinha+1];
+  if(!linhaAlvo) return;
+  const celulaAlvo = linhaAlvo.children[indiceCelula];
+  if(!celulaAlvo) return;
+  const campo = celulaAlvo.querySelector("input, select, textarea");
+  if(!campo) return;
+  e.preventDefault();
+  campo.focus();
+  if(campo.select) campo.select();
+});
+
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 const BANK_CONTA = 23; // Banco Inter C/C 33806936-4
